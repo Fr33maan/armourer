@@ -1,7 +1,6 @@
+![armourer_logo](https://raw.githubusercontent.com/prisonier/armourer/master/assets/images/armourer_logo.png)
 
 # Armourer
-
-![armourer_logo](https://github.com/prisonier/armourer/assets/images/armourer_logo.png)
 
 Armourer is a Node app built with Sails framework. It allow you to automatically install basic security software and configure them on a debian server.
 It allow you to have an uniform security bootstrap on all your servers. I made it because i wanted something more evolued than a script.
