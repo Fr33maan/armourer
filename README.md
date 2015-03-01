@@ -75,7 +75,8 @@ sails lift
 ```
 
 Sails.js runs its server on port 1337, so you will find the app at http://localhost:1337.
-
+Once you are on the home page, click on "install a server" in the navbar.
+Simply fill the form with necessary information, it should be crystal clear.
 
 
 
