@@ -1,0 +1,32 @@
+<% for(var index in servers){
+  var server = servers[index] %>
+
+
+<div id="install_log" class="col-sm-3">
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%-server.host+':'+server.host_port%></h3>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <tr><td>Status</td><td><%-server.status%></td></tr>
+        <tr><td>Created date</td><td><%-server.createdAt%></td></tr>
+        <tr><td colspan="2" class="text-center"><a href="/server/<%- server.id %>"><div class="col-sm-12">View config</div></a></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<% } %>
+
+
+
+<script>
+
+  $(function(){
+
+    $('#li_servers').addClass('active')
+
+  })
+
+</script>

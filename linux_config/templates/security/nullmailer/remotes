@@ -1,0 +1,1 @@
+mail.smtp smtp --port=465 --auth-login --user=mail.user --pass=mail.password --ssl

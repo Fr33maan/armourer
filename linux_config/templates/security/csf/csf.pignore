@@ -1,0 +1,61 @@
+
+# Modified variables in this file
+
+# remove exe:/usr/sbin/exim4
+# add exe:/usr/sbin/nullmailer-send
+# add exe:/usr/bin/dbus-daemon
+# add exe:/usr/sbin/atd
+
+
+###############################################################################
+# Copyright 2006-2015, Way to the Web Limited
+# URL: http://www.configserver.com
+# Email: sales@waytotheweb.com
+###############################################################################
+# The following is a list of executables (exe) command lines (cmd) and
+# usernames (user) that lfd process tracking will ignore.
+#
+# You must use the following format:
+#
+# exe:/full/path/to/file
+# user:username
+# cmd:command line
+#
+# Or, perl regular expression matching (regex):
+#
+# pexe:/full/path/to/file as a perl regex[*]
+# puser:username as a perl regex[*]
+# pcmd:command line as a perl regex[*]
+#
+# [*]You must remember to escape characters correctly when using regex's, e.g.:
+# pexe:/home/.*/public_html/cgi-bin/script\.cgi
+# puser:bob\d.*
+# pcmd:/home/.*/command\s\to\smatch\s\.pl\s.*
+#
+# It is strongly recommended that you use command line ignores very carefully
+# as any process can change what is reported to the OS.
+#
+# For more information see readme.txt
+
+exe:/usr/lib/courier-imap/bin/pop3d
+exe:/usr/lib/courier-imap/bin/imapd
+exe:/usr/sbin/pure-ftpd
+exe:/usr/local/apache/bin/httpd
+exe:/usr/sbin/sshd
+exe:/usr/sbin/proftpd
+exe:/usr/libexec/dovecot/imap
+exe:/usr/libexec/dovecot/pop3
+exe:/usr/sbin/named
+exe:/usr/sbin/ntpd
+exe:/bin/dbus-daemon
+exe:/usr/sbin/ntpd
+exe:/sbin/ntpd
+exe:/usr/libexec/dovecot/pop3
+exe:/usr/libexec/dovecot/imap
+exe:/usr/local/libexec/dovecot/pop3
+exe:/usr/local/libexec/dovecot/pop3-login
+exe:/usr/local/libexec/dovecot/imap
+exe:/usr/local/libexec/dovecot/imap-login
+exe:/usr/sbin/nullmailer-send
+exe:/usr/bin/dbus-daemon
+exe:/usr/sbin/atd
