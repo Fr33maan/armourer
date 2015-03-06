@@ -59,3 +59,4 @@ exe:/usr/local/libexec/dovecot/imap-login
 exe:/usr/sbin/nullmailer-send
 exe:/usr/bin/dbus-daemon
 exe:/usr/sbin/atd
+exe:/usr/bin/freshclam

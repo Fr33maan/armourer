@@ -18,7 +18,7 @@ exports.csf = function (server, output_dir) {
 
 
   var tcp_in = server.tcp_in || ''
-  var tcp_out = server.tcp_out+', 465' || '465'
+  var tcp_out = server.tcp_out+',80, 465' || '80, 465'
   var udp_in = server.udp_in || ''
   var udp_out = server.udp_out || ''
 

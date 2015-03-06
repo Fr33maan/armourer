@@ -2,7 +2,6 @@ body {
   padding-top: 50px;
 }
 
-
 .starter-template {
   padding: 40px 15px;
   text-align: center;
@@ -12,11 +11,9 @@ body {
   float : none;
 }
 
-
 .log_header{
   cursor : pointer;
 }
-
 
 .mbottom{
   margin-bottom : 20px;

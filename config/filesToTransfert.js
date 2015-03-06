@@ -45,6 +45,22 @@ module.exports.filesToTransfert = {
       {
         source : 'psad/psad.conf',
         destination : '/etc/psad/'
+      },
+      {
+        source : 'apt/50unattended-upgrades',
+        destination : '/etc/apt/apt.conf.d/'
+      },
+      {
+        source : 'apt/20auto-upgrades',
+        destination : '/etc/apt/apt.conf.d/'
+      },
+      {
+        source : 'apt/02periodic',
+        destination : '/etc/apt/apt.conf.d/'
+      },
+      {
+        source : 'apt/listchanges.conf',
+        destination : '/etc/apt/'
       }
     ]
 

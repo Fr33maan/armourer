@@ -1,4 +1,5 @@
 ![armourer_logo](https://raw.githubusercontent.com/prisonier/armourer/master/assets/images/armourer_logo.png)
+* * *
 
 # Armourer
 
@@ -20,6 +21,7 @@ The requirement to use it are :
 - mongodb
 - node packet manager
 
+* * *
 
 ## Installation
 
@@ -38,7 +40,7 @@ npm install
 ```
 
 
-
+* * *
 ## Utilisation
 
 I'm working with Debian(linux), so i only know the commands for this OS, please feel free to adapt it and tell us how you do it.
@@ -75,21 +77,17 @@ sails lift
 ```
 
 Sails.js runs its server on port 1337, so you will find the app at http://localhost:1337.
+
 Once you are on the home page, click on "install a server" in the navbar.
 Simply fill the form with necessary information, it should be crystal clear.
 
+Once the server is created, just click on the install button, you will receive all the information about the installation in this page.
 
 
+* * *
+#### Important :
 
-
-1. Server creation
-2. Install lunch
-3. Server will now reboot
-
-
-
-
-
+Be sure to open the ssh port in TCP_IN & TCP_OUT OR to create a port knocking sequence. Otherwise you will never be able to connect to your server.
 
 Once installation procedure is over, you should change the root password and the sudo password.
 I promise that there is no secret function that send me a mail with your password but it is more secure to change them.
@@ -97,31 +95,34 @@ I promise that there is no secret function that send me a mail with your passwor
 After reboot, you will not be able to connect to the root account via ssh, do it with your sudo account.
 
 
-
+* * *
 ## Configuration of the server and its software
 
 - IPV6 is disabled
 - Root login on ssh is disabled
 - We allow only the sudo account you specified in config to login on ssh
 - Exim4 is removed because in most cases we do not need a mail server -> replaced by nullmailer
+- port TCP_OUT open by default : 80 (to update system), 465 (used by nullmailer) (you do not need to add them in the config)
 
-
-
+* * *
 ## Softwares
 
 This is the list of softwares that will be installed on your server.
 
-- wget - we need it to install CSF (firewall)
-- nullmailer - light MTA
-- clamav
-- rkhunter
-- logwatch
-- fail2ban
-- CSF
-- psad
+- wget -> http://www.gnu.org/software/wget/
+- unattended-upgrades -> https://wiki.debian.org/UnattendedUpgrades
+- nullmailer -> http://untroubled.org/nullmailer/
+- clamav -> http://www.clamav.net/index.html
+- rkhunter -> http://rkhunter.sourceforge.net/
+- logwatch -> http://sourceforge.net/projects/logwatch/
+- fail2ban -> http://www.fail2ban.org/wiki/index.php/Main_Page
+- CSF+LFD -> http://configserver.com/cp/csf.html
+- psad -> http://cipherdyne.org/psad/
 
 
-## List of config files we changed and what we changed in
+
+* * *
+## List of config files we changed and what we changed
 
 ##### RKHunter
 - /etc/rkhunter/rkhunter.conf
@@ -173,13 +174,35 @@ This is the list of softwares that will be installed on your server.
 >- Domain name from each mail are sent - machine_name.company_name
 
 
+
+* * *
+## Add your own files to transfert
+
+For all servers :
+Add your file in linux_config/templates/security/the_folder_you_want/your_file
+Now got into config/filesToTransfert.js and add the source file and the destination folder. !!! Don't forget the '/' at the end of the destination folder
+Now generate the file and install the server.
+
+
+For one server :
+Generate the files
+Go to linux_config/output/security/your_server_ip:your_server_port/ and create a folder with the file in it
+Now got into config/filesToTransfert.js and add the source file and the destination folder. !!! Don't forget the '/' at the end of the destination folder
+Lunch the installation
+You can remove the file from filesToTranfert.js once the installation is done but you can also leave it in the list because we check that the file exists before trying to upload it.
+
+
+
+* * *
 ## Tricks & Personnal notes
 
 - I personnaly use mandrill with nullmailer, you can send 12 000 mails per month for free. Use the API key as password. -> https://mandrill.com/
 - The error log correspond to the error output of simple-ssh, please see the documentation if you have any questions -> https://github.com/MCluck90/simple-ssh
+- I did not installed snort because it needs Apache and mysql server. Because i wanted the install as minimal as possible. But there is this automatic installation script -> https://github.com/da667/Autosnort
+- at this moment (march 2015), clamav version in debian repo is 0.98.5 while last stable version of clamav is 0.98.6
 
-
-## For white-hats
+* * *
+## Resources
 
 You are pleased to try to hack this set up and share your results so i can update the configuration.
 I am not an expert in security, i have just compiled what i have found on tutorials like those :
@@ -189,36 +212,25 @@ I am not an expert in security, i have just compiled what i have found on tutori
 - https://www.digitalocean.com/community/tutorials/how-to-use-psad-to-detect-network-intrusion-attempts-on-an-ubuntu-vps
 - https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-12-04
 - https://www.digitalocean.com/community/tutorials/how-to-use-psad-to-detect-network-intrusion-attempts-on-an-ubuntu-vps
+- https://news.ycombinator.com/item?id=5316093
+- https://www.nsa.gov/ia/_files/os/redhat/rhel5-guide-i731.pdf
+- http://askubuntu.com/questions/447144/basic-security-tools-and-packages-that-should-be-installed-on-a-public-facing-we
+- https://benchmarks.cisecurity.org/tools2/ubuntu/CIS_Ubuntu_12.04_LTS_Server_Benchmark_v1.0.0.pdf
 
 ##### French
 - http://openclassrooms.com/courses/securiser-son-serveur-linux
 - http://www.alsacreations.com/tuto/lire/622-Securite-firewall-iptables.html
 - https://mespotesgeek.fr/configuration-et-securisation-dun-serveur-linux-debian-partie-1/
+- http://shakup.net/quelques-astuces-pour-securiser-votre-serveur-web-sous-linux/
+
 
 
 
 # TODO
->- chkrootkit
->- clamd.conf
->- update linux - cron
->- update clamav base - cron + freshclam
->- snort / tripwire
+- cron - security update linux - clamscan
+- psad --sig-update && psad -H
+- freshclam - need to solve clamd.conf error
 
->- http://shakup.net/quelques-astuces-pour-securiser-votre-serveur-web-sous-linux/
->- http://www.trustonme.net/didactels/187.html
->- http://cyberzoide.developpez.com/securite/privileges-base-de-donnees/
->- http://securite.developpez.com/cours/
-
->- https://benchmarks.cisecurity.org/tools2/ubuntu/CIS_Ubuntu_12.04_LTS_Server_Benchmark_v1.0.0.pdf
->- http://askubuntu.com/questions/447144/basic-security-tools-and-packages-that-should-be-installed-on-a-public-facing-we
->- https://www.nsa.gov/ia/_files/os/redhat/rhel5-guide-i731.pdf
->- http://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
->- https://news.ycombinator.com/item?id=5316093
-
-THE END
-
-
-
-
+- csf -r is necessary ?
 
 

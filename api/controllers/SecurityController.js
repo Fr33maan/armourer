@@ -224,8 +224,20 @@ module.exports = {
         // Copy all the config files to the server - see the readme for a description or config/filesToTransfert.js
         return Promise.all(sails.config.filesToTransfert.security.map(function (file) {
 
-          // See api/services/scp_service.js
-          return scp_service.scpPromise('linux_config/output/security/' + server_dir + '/' + file.source, file.destination, server.host, server.host_port, root_password, loger.out).then()
+          var source_file = 'linux_config/output/security/' + server_dir + '/' + file.source
+
+          try{
+            fs.readFileSync(source_file, 'utf8') // Just to check if the file exists
+
+            // See api/services/scp_service.js
+            return scp_service.scpPromise(source_file, file.destination, server.host, server.host_port, root_password, loger.out).then()
+
+          }catch(e){
+            // the file does not exists - don't try to scp it or application will crash - scp2 issue -> https://github.com/spmjs/node-scp2/issues/21
+            loger.err('file does not exists : '+ source_file)
+            return
+          }
+
         }))
 
 
@@ -262,11 +274,13 @@ module.exports = {
         })
       }).then(function () {
 
+        Server.update(server.id, {status : 'installed'})
+
         // We should check that all services are working
         // CSF -> perl /usr/local/csf/bin/csftest.pl
         // Send a test mail to root
-
         // make a freshclam - need clarification with clamd.conf
+        // Close both log and err streams
 
       }).catch(function (err) {
         sails.sockets.broadcast('errors', 'exception', err)

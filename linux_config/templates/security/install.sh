@@ -8,12 +8,6 @@
 export DEBIAN_FRONTEND=noninteractive
 
 
-# Remove list changes because we do not want to be prompted to validate update changes
-# Maybe that we won't be prompted because DEBIAN_FRONTEND is set to non interactive ?
-#######################
-apt-get remove apt-listchanges -y
-
-
 
 # Classic system update
 #######################
@@ -21,6 +15,13 @@ apt-get update && apt-get dist-upgrade -y
 
 # This is for log readability purpose
 echo "--------------- UPDATE ENDED ---------------"
+
+
+# Package for security updates
+# Force yes because the package is not authenticated
+# https://wiki.debian.org/UnattendedUpgrades
+#######################
+apt-get install unattended-upgrades apt-listchanges -y --force-yes
 
 
 # Uninstall exim4 (default debian webclient)
