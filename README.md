@@ -102,7 +102,7 @@ After reboot, you will not be able to connect to the root account via ssh, do it
 - Root login on ssh is disabled
 - We allow only the sudo account you specified in config to login on ssh
 - Exim4 is removed because in most cases we do not need a mail server -> replaced by nullmailer
-- port TCP_OUT open by default : 80 (to update system), 465 (used by nullmailer) (you do not need to add them in the config)
+- port TCP_OUT open by default : 22 or custom ssh port, 80 (to update system), 465 (used by nullmailer) (you do not need to add them in the config)
 
 * * *
 ## Softwares
@@ -168,12 +168,19 @@ This is the list of softwares that will be installed on your server.
 >- IGNORE_PORTS = port knocking sequence
 >- HOSTNAME = machine_name.company_name
 >- IPT_SYSLOG_FILE /var/log/syslog (not sure if it is correct)
+>- EMAIL_ALERT_DANGER_LEVEL    3 -> or we will be mailed very often
+>- ENABLE_AUTO_IDS             Y -> enable IP auto blocking
+>- AUTO_IDS_DANGER_LEVEL       3 -> blocking IP if danger level is 3 or above
+>- AUTO_BLOCK_TIMEOUT          36000 -> blocking time 10 hours
+
 
 ##### Other
 - /etc/mailname
 >- Domain name from each mail are sent - machine_name.company_name
 
-
+##### Cron
+- /etc/crontab
+>- change when cron.daily is executed from 6:25 to 2:00
 
 * * *
 ## Add your own files to transfert
@@ -200,18 +207,39 @@ You can remove the file from filesToTranfert.js once the installation is done bu
 - The error log correspond to the error output of simple-ssh, please see the documentation if you have any questions -> https://github.com/MCluck90/simple-ssh
 - I did not installed snort because it needs Apache and mysql server. Because i wanted the install as minimal as possible. But there is this automatic installation script -> https://github.com/da667/Autosnort
 - at this moment (march 2015), clamav version in debian repo is 0.98.5 while last stable version of clamav is 0.98.6
+- There are many outputs loged as 'error': it is simple-ssh related, i just take its error output
+- If you get the following exception it is because the dir where you try to scp the file not exists (you did not created yet or you mispelled the dirname) :
+```javascript
+armourer/node_modules/scp2/node_modules/ssh2/lib/SFTP/SFTPv3.js:227
+    throw new Error('handle is not a Buffer');
+          ^
+Error: handle is not a Buffer
+    at SFTP.write (/armourer/node_modules/scp2/node_modules/ssh2/lib/SFTP/SFTPv3.js:227:11)
+    at armourer/node_modules/scp2/lib/client.js:208:18
+    at Object.wrapper [as oncomplete] (fs.js:463:17)
+```
+
+
+* * *
+## Updates
+It is important to keep the system up to date. The package "unattended-upgrades" will automatically download debian security updates.
+ClamAV database is updated once an hour, clamscan is performed once a day during the night and an email will be sent if an infected file is found.
+
+
 
 * * *
 ## Resources
 
 You are pleased to try to hack this set up and share your results so i can update the configuration.
-I am not an expert in security, i have just compiled what i have found on tutorials like those :
+I am not an expert in security, i have just compiled what i have found on tutorials and scripts from other people.
+
+##### Script
+- https://github.com/crylium/clamav-daily -> I used this script and modified it a little bit to perform a full scan every day
 
 ##### English
 - https://www.digitalocean.com/community/tutorials/an-introduction-to-securing-your-linux-vps
 - https://www.digitalocean.com/community/tutorials/how-to-use-psad-to-detect-network-intrusion-attempts-on-an-ubuntu-vps
 - https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-12-04
-- https://www.digitalocean.com/community/tutorials/how-to-use-psad-to-detect-network-intrusion-attempts-on-an-ubuntu-vps
 - https://news.ycombinator.com/item?id=5316093
 - https://www.nsa.gov/ia/_files/os/redhat/rhel5-guide-i731.pdf
 - http://askubuntu.com/questions/447144/basic-security-tools-and-packages-that-should-be-installed-on-a-public-facing-we
@@ -222,15 +250,5 @@ I am not an expert in security, i have just compiled what i have found on tutori
 - http://www.alsacreations.com/tuto/lire/622-Securite-firewall-iptables.html
 - https://mespotesgeek.fr/configuration-et-securisation-dun-serveur-linux-debian-partie-1/
 - http://shakup.net/quelques-astuces-pour-securiser-votre-serveur-web-sous-linux/
-
-
-
-
-# TODO
-- cron - security update linux - clamscan
-- psad --sig-update && psad -H
-- freshclam - need to solve clamd.conf error
-
-- csf -r is necessary ?
-
+- http://www.canalgeek.fr/tuto-geek-installation-et-configuration-de-lantivirus-clamav-sur-debian/
 

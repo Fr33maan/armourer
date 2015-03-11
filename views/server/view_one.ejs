@@ -60,7 +60,7 @@
     <div id="install_log" class="col-sm-12">
       <div class="panel panel-info">
         <div class="panel-heading log_header">
-          <h3 class="panel-title">install.log</h3>
+          <h3 class="panel-title">install.log <span id="install_count" class="label label-default">0</span></h3>
         </div>
         <div class="panel-body" style="display: none;">
           <p class="text-left" style="white-space: pre;">
@@ -73,7 +73,7 @@
     <div id="error_log" class="col-sm-12">
       <div class="panel panel-danger">
         <div class="panel-heading log_header">
-          <h3 class="panel-title">error.log</h3>
+          <h3 class="panel-title">error.log <span id="error_count" class="label label-default">0</span></h3>
         </div>
         <div class="panel-body">
           <p class="text-left" style="white-space: pre;">
@@ -137,10 +137,20 @@
 
     io.socket.on('install', function (msg) {
       $('#install_log .panel-body').prepend('<div class="text-left">' + msg + '</div>')
+      var new_count = parseInt($('#install_count').html())+1
+      $('#install_count').html(new_count)
     })
 
     io.socket.on('error', function (msg) {
       $('#error_log .panel-body').prepend('<div class="text-left">' + msg + '</div>')
+      var new_count = parseInt($('#error_count').html())+1
+      $('#error_count').html(new_count)
+    })
+
+    io.socket.on('exception', function (msg) {
+      $('#error_log .panel-body').prepend('<div class="text-left">' + msg + '</div>')
+      var new_count = parseInt($('#error_count').html())+1
+      $('#error_count').html(new_count)
     })
   })
 

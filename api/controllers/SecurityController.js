@@ -99,6 +99,7 @@ module.exports = {
         s.fail2ban(server, output_dir)
         s.nullmailer(server, output_dir)
         s.psad(server, output_dir)
+        s.clamav(server, output_dir)
 
 
         // redirect to the server page
@@ -131,6 +132,7 @@ module.exports = {
     var SSH = require('simple-ssh') // -> https://github.com/MCluck90/simple-ssh
     var Promise = require('promise') // -> https://github.com/then/promise
     var fs = require('fs')
+    var async = require('async')
 
     // Just for readability
     var root_password = req.body.root_password
@@ -173,14 +175,14 @@ module.exports = {
 
         // loger is used to log ssh output - stored in high level scope
         loger = {
-          out: function (stdout) {
+          out: function (stdout, close_stream) {
             // third argument is for websocket use
-            log_service.file_log(wsStream, stdout, 'install')
+            log_service.file_log(wsStream, stdout, 'install', close_stream)
           },
 
-          err: function (stdout) {
+          err: function (stdout, close_stream) {
             // third argument is for websocket use
-            log_service.file_log(wsStreamError, stdout, 'error')
+            log_service.file_log(wsStreamError, stdout, 'error', close_stream)
           }
         }
 
@@ -203,7 +205,7 @@ module.exports = {
             user: 'root',
             pass: root_password
           })
-            .exec('cd /tmp; chmod +x install.sh', loger)
+            .exec('cd /tmp; chmod +x install.sh;', loger)
 
             // Lunch the script - install.sh script take two arguments : sudo_username in 1st argument and sudo_password in 2nd argument
             // We use arguments so we never store sudo_password
@@ -221,28 +223,24 @@ module.exports = {
 
       }).then(function () {
 
-        // Copy all the config files to the server - see the readme for a description or config/filesToTransfert.js
-        return Promise.all(sails.config.filesToTransfert.security.map(function (file) {
 
-          var source_file = 'linux_config/output/security/' + server_dir + '/' + file.source
+        return new Promise(function(resolve, reject){
+          var arr = []
 
-          try{
-            fs.readFileSync(source_file, 'utf8') // Just to check if the file exists
+          // Copy all the config files to the server - see the readme for a description or config/filesToTransfert.js
+          sails.config.filesToTransfert.security.map(function (file) {
 
             // See api/services/scp_service.js
-            return scp_service.scpPromise(source_file, file.destination, server.host, server.host_port, root_password, loger.out).then()
+            arr.push(scp_service.scpFunction('linux_config/output/security/' + server_dir + '/' + file.source, file.destination, server.host, server.host_port, root_password, loger.out))
+          })
 
-          }catch(e){
-            // the file does not exists - don't try to scp it or application will crash - scp2 issue -> https://github.com/spmjs/node-scp2/issues/21
-            loger.err('file does not exists : '+ source_file)
-            return
-          }
-
-        }))
-
+          async.parallelLimit(arr, 9, function(err){
+            if(err) reject(err)
+            resolve()
+          })
+        })
 
       }).then(function () {
-
 
         return new Promise(function (resolve, reject) {
 
@@ -255,10 +253,21 @@ module.exports = {
           })
 
             // Remove the install script
-            .exec('cd /tmp/; rm install.sh', loger)
+            .exec('rm /tmp/install.sh', loger)
+
+            // Chmod daily cron jobs
+            .exec('chmod +x /etc/cron.daily/psad_update.sh;', loger)
+            .exec('chmod +x /etc/cron.daily/clamscan.sh;', loger)
+
+            .exec('echo "Now reseting rkhunter baseline";',loger)
 
             // reset rkhunter baseline
-            .exec('rkhunter --propupd', loger)
+            .exec('rkhunter --propupd;', loger)
+
+
+            .exec('echo "everything OK"|mail -s "Installation for server '+ server.machine_name +'.'+ server.company_name +' is done !" "root";', loger)
+
+            .exec('echo "Installation is done, server will now reboot";',loger)
 
             // Instead of restarting each services and forget something, we restart the server
             .exec('reboot', {
@@ -274,16 +283,15 @@ module.exports = {
         })
       }).then(function () {
 
-        Server.update(server.id, {status : 'installed'})
+        return Server.update(server.id, {status : 'installed'}).then()
 
-        // We should check that all services are working
-        // CSF -> perl /usr/local/csf/bin/csftest.pl
-        // Send a test mail to root
-        // make a freshclam - need clarification with clamd.conf
-        // Close both log and err streams
+      }).then(function () {
+
+        loger.out('installation finished', true)
+        loger.err('installation finished (no more errors)', true)
 
       }).catch(function (err) {
-        sails.sockets.broadcast('errors', 'exception', err)
+        sails.sockets.broadcast('errors', 'exception', 'Error : '+err)
       })
 
   }

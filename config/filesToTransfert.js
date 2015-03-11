@@ -61,6 +61,18 @@ module.exports.filesToTransfert = {
       {
         source : 'apt/listchanges.conf',
         destination : '/etc/apt/'
+      },
+      {
+        source : 'cron/crontab',
+        destination : '/etc/',
+      },
+      {
+        source : 'cron/clamscan.sh',
+        destination : '/etc/cron.daily/',
+      },
+      {
+        source : 'cron/psad_update.sh',
+        destination : '/etc/cron.daily/',
       }
     ]
 

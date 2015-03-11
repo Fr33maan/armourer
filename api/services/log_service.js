@@ -19,7 +19,7 @@ exports.file_log = function (wsstream, msg, socket_channel, close_stream) { // c
   var time = misc_services.getCurrentDate()
 
   // Remove strings like '..... ... .....' || '...'
-  if(!(msg.match(/^( *)?\.*( *)?\.*( *)?\.*( *)?(\n*)?$/))){
+  if(!(msg.match(/^[ .]*$/))){
 
     // Broadcast the message to the given channel
     if (socket_channel) sails.sockets.broadcast('log', socket_channel, time + ' : ' + msg)

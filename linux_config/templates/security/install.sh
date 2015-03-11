@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##############################
-###### DEFAULT INSTALL #######
+###### SECURITY INSTALL ######
 ##############################
 
 
@@ -68,7 +68,7 @@ echo net.ipv6.conf.all.disable_ipv6=1 > /etc/sysctl.d/disableipv6.conf
 echo "--------------- IPV6 DISABLED ---------------"
 
 
-# Create a new user and add it to sudoers
+# Add the given user to sudoers group
 #######################
 sudoUsername="$1"
 

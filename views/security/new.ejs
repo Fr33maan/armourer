@@ -81,7 +81,7 @@
     <div class="form-group">
       <label class="control-label col-sm-2" for="tcp_in">TCP IN</label>
       <div class="col-sm-10">
-        <input class="form-control" type="text" name="tcp_in" id="tcp_in" placeholder="22,33,44 (ssh port will not be open by default, you must explicitely open it)">
+        <input class="form-control" type="text" name="tcp_in" id="tcp_in" placeholder="22,33,44 (ssh port will not be open by default, you must explicitely open it OR set a port knocking sequence)">
       </div>
     </div>
 
@@ -90,7 +90,7 @@
     <div class="form-group">
       <label class="control-label col-sm-2" for="tcp_out">TCP OUT</label>
       <div class="col-sm-10">
-        <input class="form-control" type="text" name="tcp_out" id="tcp_out" placeholder="22,33,44 (465 is added automatically by default)">
+        <input class="form-control" type="text" name="tcp_out" id="tcp_out" placeholder="22,33,44 (80, 465 are opened automatically by default)">
       </div>
     </div>
 
@@ -162,6 +162,35 @@
 
     $('#li_install_server').addClass('active')
 
+
+    $('form').submit(function(e){
+
+      var ssh_port = $('#ssh_port').val().length > 0 ? $('#ssh_port').val() : '22'
+      var port_knocking = $('#port_knocking').val().length > 0
+
+      if(!port_knocking){
+
+        var tcp_in = $('#tcp_in').val()
+        var tcp_out = $('#tcp_out').val()
+        var ssh_regex = new RegExp(ssh_port)
+
+        console.log(tcp_in)
+        console.log(tcp_out)
+
+        if(!(tcp_in.match(ssh_regex)) || !(tcp_out.match(ssh_regex))){
+          if(!confirm('You did not opened the ssh port AND you did not specified a port knocking sequence, you will NOT be able to connect to your server once installation is done. Do you want to continue ? (bad idea)')){
+            e.preventDefault()
+          }
+        }
+      }else{
+
+        if($('#port_knocking').val().split(',').length < 3){
+          alert('The port knocking sequence must contains at least 3 different ports')
+          e.preventDefault()
+        }
+
+      }
+    })
   })
 
 </script>

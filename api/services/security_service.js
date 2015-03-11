@@ -10,21 +10,21 @@ exports.csf = function (server, output_dir) {
   var port_knocking, ip_allowed
 
   if (server.port_knocking) {
-    port_knocking = ssh_port + ';TCP;20;' + server.port_knocking
+    port_knocking = ssh_port + ';TCP;20;' + server.port_knocking.replace(/,/g, ';')
   } else {
     port_knocking = ''
   }
 
-
+  var tcp_out_default_sequence = ssh_port+',80, 465'
 
   var tcp_in = server.tcp_in || ''
-  var tcp_out = server.tcp_out+',80, 465' || '80, 465'
+  var tcp_out = server.tcp_out ? server.tcp_out+','+tcp_out_default_sequence : tcp_out_default_sequence
   var udp_in = server.udp_in || ''
   var udp_out = server.udp_out || ''
 
 
   if(server.ipallowed){
-    ip_allowed = server.ipallowed.replace(',', '\n')
+    ip_allowed = server.ipallowed.replace(/,/g, '\n')
   }else{
     ip_allowed = ''
   }
@@ -74,7 +74,7 @@ exports.psad = function (server, output_dir) {
 
   if (server.port_knocking) {
 
-    var arr = server.port_knocking.split(';')
+    var arr = server.port_knocking.split(',')
 
 
     for(var index in arr){
@@ -90,5 +90,13 @@ exports.psad = function (server, output_dir) {
 
   misc_services.replaceInFile(output_dir+'/psad/psad.conf', 'psad.portsequence', port_sequence)
   misc_services.replaceInFile(output_dir+'/psad/psad.conf', 'machine_name.company_name', server.machine_name+'.'+server.company_name)
+
+  misc_services.replaceInFile(output_dir+'/cron/psad_update.sh', 'machine.name', server.machine_name)
+  misc_services.replaceInFile(output_dir+'/cron/psad_update.sh', 'company.name', server.company_name)
 }
 
+exports.clamav = function (server, output_dir) {
+
+  misc_services.replaceInFile(output_dir+'/cron/clamscan.sh', 'machine.name', server.machine_name)
+  misc_services.replaceInFile(output_dir+'/cron/clamscan.sh', 'company.name', server.company_name)
+}
