@@ -283,7 +283,7 @@ module.exports = {
         })
       }).then(function () {
 
-        return Server.update(server.id, {status : 'installed'}).then()
+        return Server.update(server.id, {status : 'installed', host_port : server.ssh_port}).then()
 
       }).then(function () {
 

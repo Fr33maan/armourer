@@ -90,7 +90,7 @@
     <div class="form-group">
       <label class="control-label col-sm-2" for="tcp_out">TCP OUT</label>
       <div class="col-sm-10">
-        <input class="form-control" type="text" name="tcp_out" id="tcp_out" placeholder="22,33,44 (80, 465 are opened automatically by default)">
+        <input class="form-control" type="text" name="tcp_out" id="tcp_out" placeholder="22,33,44 (ssh_port, 80, 465 are opened automatically by default)">
       </div>
     </div>
 
@@ -171,13 +171,12 @@
       if(!port_knocking){
 
         var tcp_in = $('#tcp_in').val()
-        var tcp_out = $('#tcp_out').val()
         var ssh_regex = new RegExp(ssh_port)
 
         console.log(tcp_in)
         console.log(tcp_out)
 
-        if(!(tcp_in.match(ssh_regex)) || !(tcp_out.match(ssh_regex))){
+        if(!(tcp_in.match(ssh_regex))){
           if(!confirm('You did not opened the ssh port AND you did not specified a port knocking sequence, you will NOT be able to connect to your server once installation is done. Do you want to continue ? (bad idea)')){
             e.preventDefault()
           }

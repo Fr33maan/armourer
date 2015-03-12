@@ -91,12 +91,12 @@ exports.psad = function (server, output_dir) {
   misc_services.replaceInFile(output_dir+'/psad/psad.conf', 'psad.portsequence', port_sequence)
   misc_services.replaceInFile(output_dir+'/psad/psad.conf', 'machine_name.company_name', server.machine_name+'.'+server.company_name)
 
-  misc_services.replaceInFile(output_dir+'/cron/psad_update.sh', 'machine.name', server.machine_name)
-  misc_services.replaceInFile(output_dir+'/cron/psad_update.sh', 'company.name', server.company_name)
+  misc_services.replaceInFile(output_dir+'/cron/psad_update', 'machine.name', server.machine_name)
+  misc_services.replaceInFile(output_dir+'/cron/psad_update', 'company.name', server.company_name)
 }
 
 exports.clamav = function (server, output_dir) {
 
-  misc_services.replaceInFile(output_dir+'/cron/clamscan.sh', 'machine.name', server.machine_name)
-  misc_services.replaceInFile(output_dir+'/cron/clamscan.sh', 'company.name', server.company_name)
+  misc_services.replaceInFile(output_dir+'/cron/clamscan', 'machine.name', server.machine_name)
+  misc_services.replaceInFile(output_dir+'/cron/clamscan', 'company.name', server.company_name)
 }
