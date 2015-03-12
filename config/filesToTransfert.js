@@ -63,8 +63,8 @@ module.exports.filesToTransfert = {
         destination : '/etc/apt/'
       },
       {
-        source : 'cron/crontab',
-        destination : '/etc/',
+        source : 'cron/cron_daily',
+        destination : '/etc/cron.d/',
       },
       {
         source : 'cron/clamscan',
@@ -75,6 +75,4 @@ module.exports.filesToTransfert = {
         destination : '/etc/cron.daily/',
       }
     ]
-
-
 }

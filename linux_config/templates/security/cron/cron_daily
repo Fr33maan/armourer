@@ -1,0 +1,4 @@
+HELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+00 02   * * *   root cd / && run-parts --report /etc/cron.daily
