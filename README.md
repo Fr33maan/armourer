@@ -224,7 +224,7 @@ Error: handle is not a Buffer
 ## Updates
 It is important to keep the system up to date. The package "unattended-upgrades" will automatically download debian security updates.
 ClamAV database is updated once an hour, clamscan is performed once a day during the night and an email will be sent if an infected file is found.
-
+Psad signature update is also performed once a day. You can find update script in /etc/cron.daily/
 
 
 * * *

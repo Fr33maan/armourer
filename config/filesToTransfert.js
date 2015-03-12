@@ -67,11 +67,11 @@ module.exports.filesToTransfert = {
         destination : '/etc/',
       },
       {
-        source : 'cron/clamscan.sh',
+        source : 'cron/clamscan',
         destination : '/etc/cron.daily/',
       },
       {
-        source : 'cron/psad_update.sh',
+        source : 'cron/psad_update',
         destination : '/etc/cron.daily/',
       }
     ]
