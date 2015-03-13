@@ -256,8 +256,8 @@ module.exports = {
             .exec('rm /tmp/install.sh', loger)
 
             // Chmod daily cron jobs
-            .exec('chmod +x /etc/cron.daily/psad_update.sh;', loger)
-            .exec('chmod +x /etc/cron.daily/clamscan.sh;', loger)
+            .exec('chmod +x /etc/cron.daily/psad_update;', loger)
+            .exec('chmod +x /etc/cron.daily/clamscan;', loger)
 
             .exec('echo "Now reseting rkhunter baseline";',loger)
 
