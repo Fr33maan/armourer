@@ -28,7 +28,7 @@ MALWARE=$(tail "$LOGFILE"|grep Infected|cut -d" " -f3);
 if [ "$MALWARE" -ne "0" ]; then
 	echo "$EMAIL_MSG"|mail -a "$LOGFILE" -s "ClamAV: Malware Found on machine.name.company.name" "$EMAIL_TO";
 else
-  echo "No infected file found on machine.name.company.name, everything is OK"|mail -s "ClamAV : No infected file found" -r "$EMAIL_FROM" "$EMAIL_TO";
+  echo "No infected file found on machine.name.company.name, everything is OK"|mail -s "ClamAV : No infected file found" "$EMAIL_TO";
 fi
 
 echo "The script has finished.";
