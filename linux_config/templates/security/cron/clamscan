@@ -6,7 +6,6 @@
 #
 LOGFILE="/var/log/clamav/clamav-$(date +'%Y-%m-%d').log";
 EMAIL_MSG="The system is infected, see the log file attached";
-EMAIL_FROM="clamav@machine.name.company.name";
 EMAIL_TO="root";
 DIRTOSCAN="/";
 
@@ -27,7 +26,7 @@ MALWARE=$(tail "$LOGFILE"|grep Infected|cut -d" " -f3);
 
 # if the value is not equal to zero, send an email with the log file attached, else send a mail to say that everything is ok
 if [ "$MALWARE" -ne "0" ]; then
-	echo "$EMAIL_MSG"|mail -a "$LOGFILE" -s "ClamAV: Malware Found on machine.name.company.name" -r "$EMAIL_FROM" "$EMAIL_TO";
+	echo "$EMAIL_MSG"|mail -a "$LOGFILE" -s "ClamAV: Malware Found on machine.name.company.name" "$EMAIL_TO";
 else
   echo "No infected file found on machine.name.company.name, everything is OK"|mail -s "ClamAV : No infected file found" -r "$EMAIL_FROM" "$EMAIL_TO";
 fi

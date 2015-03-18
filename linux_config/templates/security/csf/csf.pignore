@@ -5,7 +5,7 @@
 # add exe:/usr/sbin/nullmailer-send
 # add exe:/usr/bin/dbus-daemon
 # add exe:/usr/sbin/atd
-
+# add exe:/sbin/rpc.statd
 
 ###############################################################################
 # Copyright 2006-2015, Way to the Web Limited
@@ -60,3 +60,5 @@ exe:/usr/sbin/nullmailer-send
 exe:/usr/bin/dbus-daemon
 exe:/usr/sbin/atd
 exe:/usr/bin/freshclam
+exe:/sbin/rpc.statd
+
