@@ -22,9 +22,8 @@ exports.csf = function (server, output_dir) {
   var udp_in = server.udp_in || ''
   var udp_out = server.udp_out || ''
 
-
-  if(server.ipallowed){
-    ip_allowed = server.ipallowed.replace(/,/g, '\n')
+  if(server.ip_ignore){
+    ip_allowed = server.ip_ignore.replace(/,/g, '\n')
   }else{
     ip_allowed = ''
   }
