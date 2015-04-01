@@ -147,6 +147,7 @@ This is the list of softwares that will be installed on your server.
 >- TCP_IN, TCP_OUT, UDP_IN, UDP_OUT
 >- PORTKNOCKING (if defined)
 >- RESTRICT_SYSLOG = "3" - as recommended in csf.conf
+>- URLGET = "1" - Perl module for LWP must be manually installed
 
 - /etc/csf/csf.allow
 - /etc/csf/csf.ignore
