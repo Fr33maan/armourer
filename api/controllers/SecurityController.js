@@ -264,7 +264,7 @@ module.exports = {
             // reset rkhunter baseline
             .exec('rkhunter --propupd;', loger)
 
-
+            // Send a mail to the admin address to say that the server is installed
             .exec('echo "everything OK"|mail -s "Installation for server '+ server.machine_name +'.'+ server.company_name +' is done !" "root";', loger)
 
             .exec('echo "Installation is done, server will now reboot";',loger)

@@ -236,6 +236,7 @@ Psad signature update is also performed once a day. You can find update script i
 - change ip:null by ip:ssh_port if ssh_port is not 22
 - install sudo command
 - server templates
+- update status once server is installed
 - plugins (apache + php + mysql + plesk / minecraft)
 - add that port 587 (TLS) is used by default by SMTP
 - open ssh port by default -> detect what is the port to use
