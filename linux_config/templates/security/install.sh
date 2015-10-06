@@ -35,7 +35,7 @@ echo "--------------- EXIM PURGE ENDED ---------------"
 # Install basic and security server softwares in silent mode
 #######################
 
-apt-get install wget nullmailer clamav logwatch fail2ban psad rkhunter -y
+apt-get install wget nullmailer clamav logwatch fail2ban psad rkhunter sudo -y
 
 psad --sig-update
 

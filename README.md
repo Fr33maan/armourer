@@ -228,6 +228,32 @@ ClamAV database is updated once an hour, clamscan is performed once a day during
 Psad signature update is also performed once a day. You can find update script in /etc/cron.daily/
 
 
+
+
+
+* * *
+## Planned features
+- change ip:null by ip:ssh_port if ssh_port is not 22
+- install sudo command
+- server templates
+- plugins (apache + php + mysql + plesk / minecraft)
+- add that port 587 (TLS) is used by default by SMTP
+- open ssh port by default -> detect what is the port to use
+- edit a server and reinstall it
+- explain that is going in "error log" is not really error but what is flagged as error in stdout in ssh npm
+- error : Once the server is installed, the node server will crash after a while
+
+  - http://stackoverflow.com/questions/31501038/node-js-error-read-econnreset
+  - http://stackoverflow.com/questions/17245881/node-js-econnreset
+      events.js:85
+            throw er; // Unhandled 'error' event
+                  ^
+      Error: read ECONNRESET
+          at exports._errnoException (util.js:746:11)
+          at TCP.onread (net.js:559:26)
+
+
+
 * * *
 ## Resources
 
