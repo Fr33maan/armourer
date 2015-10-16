@@ -1,4 +1,4 @@
-module.exports.filesToTransfert = {
+module.exports.filesToTransfert_old = {
 
 
     security : [

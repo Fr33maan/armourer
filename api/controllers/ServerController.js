@@ -6,6 +6,27 @@
  */
 
 module.exports = {
+
+
+  new : function(req, res){
+
+    var modules = {}
+    var module_list = require('../../linux_config/config/module_order')
+
+    for(i in module_list){
+
+      var module = module_list[i]
+
+      modules[module] = require('../../linux_config/config/'+ module +'/post_variables').install
+    }
+
+
+
+    return res.view({debugg : sails.config.debug, modules : modules})
+
+  },
+
+
 	view_all : function(req, res){
 
     // See sails ORM documentation -> https://github.com/balderdashy/waterline
@@ -22,15 +43,27 @@ module.exports = {
 
     var fs = require('fs')
 
+    var modules = {}
+    var module_list = require('../../linux_config/config/module_order')
+
+    for(i in module_list){
+
+      var module = module_list[i]
+
+      modules[module] = require('../../linux_config/config/'+ module +'/post_variables').secret
+    }
+
     // See sails ORM documentation -> https://github.com/balderdashy/waterline
     Server.findOne(req.params.server_id).then(function(server){
 
+      // If a bad request
       if(!server){
         req.flash('message', 'server not found')
         return res.redirect('/servers')
 
       }else{
 
+        // Fetch the logs if they exist
         var install_log, error_log
         var server_dir = server.host+':'+server.host_port
 
@@ -44,7 +77,7 @@ module.exports = {
           // If files does not exists there will be an error but we don't care
         }
 
-        res.view({server : server, install_log : install_log, error_log : error_log})
+        res.view({server : server, install_log : install_log, error_log : error_log, modules : modules})
       }
 
     }).catch(function(err){

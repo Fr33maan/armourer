@@ -1,6 +1,6 @@
 exports.ssh = function (server, output_dir) {
-  misc_services.replaceInFile(output_dir+'/ssh/sshd_config', 'ssh.port', server.ssh_port || '22')
-  misc_services.replaceInFile(output_dir+'/ssh/sshd_config', 'sudo.user', server.sudo_user)
+  misc_services.replaceInFile(output_dir+'/security/ssh/sshd_config', 'ssh.port', server.ssh_port || '22')
+  misc_services.replaceInFile(output_dir+'/security/ssh/sshd_config', 'sudo.user', server.sudo_user)
 }
 
 
@@ -28,17 +28,18 @@ exports.csf = function (server, output_dir) {
     ip_allowed = ''
   }
 
+  var replace = misc_services.replaceInFile
 
-  misc_services.replaceInFile(output_dir+'/csf/csf.conf', 'tcp.in', tcp_in)
-  misc_services.replaceInFile(output_dir+'/csf/csf.conf', 'tcp.out', tcp_out)
-  misc_services.replaceInFile(output_dir+'/csf/csf.conf', 'udp.in', udp_in)
-  misc_services.replaceInFile(output_dir+'/csf/csf.conf', 'udp.out', udp_out)
+  replace(output_dir+'/security/csf/csf.conf', 'tcp.in', tcp_in)
+  replace(output_dir+'/security/csf/csf.conf', 'tcp.out', tcp_out)
+  replace(output_dir+'/security/csf/csf.conf', 'udp.in', udp_in)
+  replace(output_dir+'/security/csf/csf.conf', 'udp.out', udp_out)
 
-  misc_services.replaceInFile(output_dir+'/csf/csf.conf', 'firewall.portknocking', port_knocking)
-  misc_services.replaceInFile(output_dir+'/csf/csf.conf', 'ssh.port', ssh_port)
+  replace(output_dir+'/security/csf/csf.conf', 'firewall.portknocking', port_knocking)
+  replace(output_dir+'/security/csf/csf.conf', 'ssh.port', ssh_port)
 
-  misc_services.replaceInFile(output_dir+'/csf/csf.allow', 'ip.list', ip_allowed)
-  misc_services.replaceInFile(output_dir+'/csf/csf.ignore', 'ip.list', ip_allowed)
+  replace(output_dir+'/security/csf/csf.allow', 'ip.list', ip_allowed)
+  replace(output_dir+'/security/csf/csf.ignore', 'ip.list', ip_allowed)
 }
 
 
@@ -52,19 +53,19 @@ exports.fail2ban = function (server, output_dir) {
     ignore_ip = server.ipallowed.replace(',', ' ')
   }
 
-  misc_services.replaceInFile(output_dir+'/fail2ban/jail.local', 'ssh.port', ssh_port)
-  misc_services.replaceInFile(output_dir+'/fail2ban/jail.local', 'fail2ban.ignoreip', ignore_ip)
+  misc_services.replaceInFile(output_dir+'/security/fail2ban/jail.local', 'ssh.port', ssh_port)
+  misc_services.replaceInFile(output_dir+'/security/fail2ban/jail.local', 'fail2ban.ignoreip', ignore_ip)
 }
 
 
 exports.nullmailer = function (server, output_dir) {
-  misc_services.replaceInFile(output_dir+'/nullmailer/remotes', 'mail.smtp', server.mail_smtp)
-  misc_services.replaceInFile(output_dir+'/nullmailer/remotes', 'mail.user', server.mail_user)
-  misc_services.replaceInFile(output_dir+'/nullmailer/remotes', 'mail.password', server.mail_password)
-  misc_services.replaceInFile(output_dir+'/nullmailer/adminaddr', 'control.mail', server.admin_mail)
+  misc_services.replaceInFile(output_dir+'/security/nullmailer/remotes', 'mail.smtp', server.mail_smtp)
+  misc_services.replaceInFile(output_dir+'/security/nullmailer/remotes', 'mail.user', server.mail_user)
+  misc_services.replaceInFile(output_dir+'/security/nullmailer/remotes', 'mail.password', server.mail_password)
+  misc_services.replaceInFile(output_dir+'/security/nullmailer/adminaddr', 'control.mail', server.admin_mail)
 
-  misc_services.replaceInFile(output_dir+'/shared/mailname', 'machine.name', server.machine_name)
-  misc_services.replaceInFile(output_dir+'/shared/mailname', 'company.name', server.company_name)
+  misc_services.replaceInFile(output_dir+'/security/shared/mailname', 'machine.name', server.machine_name)
+  misc_services.replaceInFile(output_dir+'/security/shared/mailname', 'company.name', server.company_name)
 }
 
 exports.psad = function (server, output_dir) {
@@ -87,15 +88,22 @@ exports.psad = function (server, output_dir) {
   }
 
 
-  misc_services.replaceInFile(output_dir+'/psad/psad.conf', 'psad.portsequence', port_sequence)
-  misc_services.replaceInFile(output_dir+'/psad/psad.conf', 'machine_name.company_name', server.machine_name+'.'+server.company_name)
+  misc_services.replaceInFile(output_dir+'/security/psad/psad.conf', 'psad.portsequence', port_sequence)
+  misc_services.replaceInFile(output_dir+'/security/psad/psad.conf', 'machine_name.company_name', server.machine_name+'.'+server.company_name)
 
-  misc_services.replaceInFile(output_dir+'/cron/psad_update', 'machine.name', server.machine_name)
-  misc_services.replaceInFile(output_dir+'/cron/psad_update', 'company.name', server.company_name)
+  misc_services.replaceInFile(output_dir+'/security/cron/psad_update', 'machine.name', server.machine_name)
+  misc_services.replaceInFile(output_dir+'/security/cron/psad_update', 'company.name', server.company_name)
 }
 
 exports.clamav = function (server, output_dir) {
 
-  misc_services.replaceInFile(output_dir+'/cron/clamscan', 'machine.name', server.machine_name)
-  misc_services.replaceInFile(output_dir+'/cron/clamscan', 'company.name', server.company_name)
+  misc_services.replaceInFile(output_dir+'/security/cron/clamscan', 'machine.name', server.machine_name)
+  misc_services.replaceInFile(output_dir+'/security/cron/clamscan', 'company.name', server.company_name)
+}
+
+
+exports.lamp = function(server, output_dir) {
+
+  misc_services.replaceInFile(output_dir+'/lamp/vsftp/vsftpd.chroot_list', 'sudo.user', server.sudo_user)
+
 }

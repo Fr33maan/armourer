@@ -109,6 +109,7 @@ After reboot, you will not be able to connect to the root account via ssh, do it
 
 This is the list of softwares that will be installed on your server.
 
+### Security module
 - wget -> http://www.gnu.org/software/wget/
 - unattended-upgrades -> https://wiki.debian.org/UnattendedUpgrades
 - nullmailer -> http://untroubled.org/nullmailer/
@@ -119,87 +120,126 @@ This is the list of softwares that will be installed on your server.
 - CSF+LFD -> http://configserver.com/cp/csf.html
 - psad -> http://cipherdyne.org/psad/
 
-
+### LAMP module
+- apache
+- mysql
+- php
+- phpMyAdmin
+- VSFTP
 
 * * *
 ## List of config files we changed and what we changed
 
-##### RKHunter
-- /etc/rkhunter/rkhunter.conf
->- MAIL-ON-WARNING="root"
-
-##### sshd service
-- /etc/ssh/sshd_config
->- PermitRootLogin no
->- port
->- AllowUsers sudo_username
-
-##### Fail2Ban
-- /etc/fail2ban/jail.local
->- [DEFAULT] - ignoreip (if defined)
->- [ssh] - port
-
-##### CSF
-- /etc/csf/csf.conf
->- TESTING = "0"
->- CONNLIMIT (1 connection allowed on ssh_port)
->- LF_ALERT_TO = "root"
->- TCP_IN, TCP_OUT, UDP_IN, UDP_OUT
->- PORTKNOCKING (if defined)
->- RESTRICT_SYSLOG = "3" - as recommended in csf.conf
->- URLGET = "1" - Perl module for LWP must be manually installed
-
-- /etc/csf/csf.allow
-- /etc/csf/csf.ignore
-- /etc/csf/csf.pignore
->- remove exe:/usr/sbin/exim4
->- add exe:/usr/sbin/nullmailer-send
->- add exe:/usr/bin/dbus-daemon
->- add exe:/usr/sbin/atd - i'm not sure if it is secure to remove ressource check for this executable
-
-##### Nullmailer
-
-- /etc/nullamiler/remotes
-- /etc/nullmailer/adminaddr
->- Used to redirect local mails to an external email address
-
-
-##### Psad
-- /etc/psad/psad.conf
->- IGNORE_PORTS = port knocking sequence
->- HOSTNAME = machine_name.company_name
->- IPT_SYSLOG_FILE /var/log/syslog (not sure if it is correct)
->- EMAIL_ALERT_DANGER_LEVEL    3 -> or we will be mailed very often
->- ENABLE_AUTO_IDS             Y -> enable IP auto blocking
->- AUTO_IDS_DANGER_LEVEL       3 -> blocking IP if danger level is 3 or above
->- AUTO_BLOCK_TIMEOUT          36000 -> blocking time 10 hours
-
-
-##### Other
-- /etc/mailname
->- Domain name from each mail are sent - machine_name.company_name
-
-##### Cron
-- /etc/crontab
->- change when cron.daily is executed from 6:25 to 2:00
+### Security module
 
 * * *
-## Add your own files to transfert
+#### RKHunter
+/etc/rkhunter/rkhunter.conf
+- MAIL-ON-WARNING="root"
 
-For all servers :
-Add your file in linux_config/templates/security/the_folder_you_want/your_file
-Now got into config/filesToTransfert.js and add the source file and the destination folder. !!! Don't forget the '/' at the end of the destination folder
-Now generate the file and install the server.
+* * *
+#### sshd service
+/etc/ssh/sshd_config
+- PermitRootLogin no
+- port
+- AllowUsers sudo_username
+
+* * *
+#### Fail2Ban
+/etc/fail2ban/jail.local
+- [DEFAULT] - ignoreip (if defined)
+- [ssh] - port
+
+* * *
+#### CSF
+/etc/csf/csf.conf
+- TESTING = "0"
+- CONNLIMIT (1 connection allowed on ssh_port)
+- LF_ALERT_TO = "root"
+- TCP_IN, TCP_OUT, UDP_IN, UDP_OUT
+- PORTKNOCKING (if defined)
+- RESTRICT_SYSLOG = "3" - as recommended in csf.conf
+- URLGET = "1" - Perl module for LWP must be manually installed
+
+/etc/csf/csf.allow
+/etc/csf/csf.ignore
+/etc/csf/csf.pignore
+- remove exe:/usr/sbin/exim4
+- add exe:/usr/sbin/nullmailer-send
+- add exe:/usr/bin/dbus-daemon
+- add exe:/usr/sbin/atd - i'm not sure if it is secure to remove ressource check for this executable
+
+* * *
+#### Nullmailer
+
+/etc/nullamiler/remotes
+/etc/nullmailer/adminaddr
+- Used to redirect local mails to an external email address
+
+* * *
+#### Psad
+/etc/psad/psad.conf
+- IGNORE_PORTS = port knocking sequence
+- HOSTNAME = machine_name.company_name
+- IPT_SYSLOG_FILE /var/log/syslog (not sure if it is correct)
+- EMAIL_ALERT_DANGER_LEVEL    3 -> or we will be mailed very often
+- ENABLE_AUTO_IDS             Y -> enable IP auto blocking
+- AUTO_IDS_DANGER_LEVEL       3 -> blocking IP if danger level is 3 or above
+- AUTO_BLOCK_TIMEOUT          36000 -> blocking time 10 hours
+
+* * *
+#### Other
+/etc/mailname
+- Domain name from each mail are sent - machine_name.company_name
+
+* * *
+#### Cron
+/etc/crontab
+- change when cron.daily is executed from 6:25 to 2:00
+
+* * *
+### LAMP module
 
 
-For one server :
-Generate the files
-Go to linux_config/output/security/your_server_ip:your_server_port/ and create a folder with the file in it
-Now got into config/filesToTransfert.js and add the source file and the destination folder. !!! Don't forget the '/' at the end of the destination folder
-Lunch the installation
-You can remove the file from filesToTranfert.js once the installation is done but you can also leave it in the list because we check that the file exists before trying to upload it.
 
+* * *
+## Creating your own modules
 
+What I call a module is a bunch of software the needed commands to install them. A module is independant.
+The only available module for the moment is "lamp". It will install php, mysql, apache and phpmyadmin.
+You can very easily creates new module just with configuration and without any code.
+
+Before creating your modules you need to understand how modules are installed.
+
+1. We generate files from templates and replace some variables inside
+2. We lunch "before" bash script with arguments
+3. We transfer all the files
+4. We lunch the "after" script with arguments
+
+How to create your own module :
+
+/linux_config
+  /your_module_name
+    /after
+      after.sh
+      config.js
+    /before
+      before.sh
+      config.js
+    files_to_transfer.js
+    post_variables.js
+
+1. create a folder in linux_config/config with the name of your module
+2. Add your module to the module_order.js file AFTER THE SECURITY MODULE as this module will update the system
+3. create folders "before" and "after"
+4. create a post_variables.js file. This file will contain the variables which will appear in the forms.
+In the "install" array there is the variables which appear in the install form (when you create the server)
+In the "secret" array, there is the different passwords needed to install your server (root password, mysql password or any other password needed for your scripts)
+
+5. Create a folder with your module name in linux_config/templates
+6. Organize your module files as you want
+7. Create a files_to_transfer.js file and list the files of your module and their destination on the server
+8. Create a replace file with the rules you need - TODO
 
 * * *
 ## Tricks & Personnal notes
@@ -233,12 +273,8 @@ Psad signature update is also performed once a day. You can find update script i
 
 * * *
 ## Planned features
-- change ip:null by ip:ssh_port if ssh_port is not 22
-- install sudo command
 - server templates
-- update status once server is installed
 - plugins (apache + php + mysql + plesk / minecraft)
-- add that port 587 (TLS) is used by default by SMTP
 - open ssh port by default -> detect what is the port to use
 - edit a server and reinstall it
 - explain that is going in "error log" is not really error but what is flagged as error in stdout in ssh npm
@@ -258,8 +294,8 @@ Psad signature update is also performed once a day. You can find update script i
 * * *
 ## Resources
 
-You are pleased to try to hack this set up and share your results so i can update the configuration.
-I am not an expert in security, i have just compiled what i have found on tutorials and scripts from other people.
+You are pleased to try to hack this set up and share your results so I can update the configuration.
+I am not an expert in security, I have just compiled what I have found on tutorials and scripts from other people.
 
 ##### Script
 - https://github.com/crylium/clamav-daily -> I used this script and modified it a little bit to perform a full scan every day
@@ -272,6 +308,9 @@ I am not an expert in security, i have just compiled what i have found on tutori
 - https://www.nsa.gov/ia/_files/os/redhat/rhel5-guide-i731.pdf
 - http://askubuntu.com/questions/447144/basic-security-tools-and-packages-that-should-be-installed-on-a-public-facing-we
 - https://benchmarks.cisecurity.org/tools2/ubuntu/CIS_Ubuntu_12.04_LTS_Server_Benchmark_v1.0.0.pdf
+
+###### Lamp
+- http://www.cyberciti.biz/tips/howto-write-shell-script-to-add-user.html
 
 ##### French
 - http://openclassrooms.com/courses/securiser-son-serveur-linux

@@ -37,12 +37,12 @@ module.exports.routes = {
 
   // Server
   'GET /servers' : 'ServerController.view_all',
+  'GET /server/new' : 'ServerController.new',
   'GET /server/:server_id' : 'ServerController.view_one',
   'GET /destroy_server/:server_id' : 'ServerController.destroy',
 
 
   // Security server
-  'GET /security/new' : {view : 'security/new'},
   'POST /security/new' : 'SecurityController.register_and_generate_files',
 
 

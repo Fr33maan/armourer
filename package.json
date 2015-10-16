@@ -1,9 +1,9 @@
 {
   "name": "armourer",
   "private": true,
-  "version": "0.1.0",
-  "description": "Default security configuration & installation for a Debian machine",
-  "keywords": [],
+  "version": "0.2.0",
+  "description": "Default security configuration & installation for a Debian machine + automatic install for whatever you want",
+  "keywords": ["debian install", "automatic install", "security", "basic configuration"],
   "dependencies": {
     "sails": "~0.11.0",
     "sails-disk": "~0.10.0",

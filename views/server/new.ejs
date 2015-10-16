@@ -1,0 +1,308 @@
+<%
+// If we give a debug var to res.view, a stack trace will be console logged so we had to change the variable name
+var debug = debugg
+
+var host_ip = debug ? '188.166.10.56' : ''
+var admin_email = debug ? 'bej.delahanse@gmail.com' : ''
+var sudo_username = debug ? 'sudouser' : ''
+var smtp_server = debug ? 'smtp.mandrillapp.com' : ''
+var smtp_login = debug ? 'bej.delahanse@gmail.com' : ''
+var smtp_passwd = debug ? '9mXsv6cLNBFJmjXrWaTVaA' : ''
+var machine_name = debug ? 'debian_test' : ''
+var company_name = debug ? 'test_company' : ''
+var ssh_port = debug ? '22' : ''
+var tcp_in = debug ? '22' : ''
+%>
+
+
+<form method="post" action="/security/new" class="form-horizontal col-sm-offset-2 col-sm-8" role="form">
+
+  <fieldset>
+    <legend>Required</legend>
+
+    <input type="hidden" name="security" value="on">
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="host">Host IP</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="host" id="host"
+               placeholder="The IP address where the server can be reach" value="<%- host_ip %>">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="admin_mail">Admin email address</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="admin_mail" id="admin_mail"
+               placeholder="the email address where you want to receive all mails from software"
+               value="<%- admin_email %>">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="sudo_user">Sudo Username</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="sudo_user" id="sudo_user"
+               placeholder="The name of the user you created on the server" value="<%- sudo_username %>">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="mail_smtp">Smtp server</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="mail_smtp" id="mail_smtp"
+               placeholder="The smtp server you will use to send emails. Eg. smtp.mandrillapp.com"
+               value="<%- smtp_server %>">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="mail_user">Email service login</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="mail_user" id="mail_user"
+               placeholder="The user allowed to send mail with your smtp server" value="<%- smtp_login %>">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="mail_password">Email service password</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="mail_password" id="mail_password"
+               placeholder="The password of this user" value="<%- smtp_passwd %>">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="machine_name">Machine name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="machine_name" id="machine_name"
+               placeholder="The name of your machine, it will be used for emails." value="<%- machine_name %>">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="company_name">Your company name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="company_name" id="company_name"
+               placeholder="The name of your company, it will be used for emails." value="<%- company_name %>">
+      </div>
+    </div>
+
+  </fieldset>
+
+  <% // ----------------------------------------------------------------------------------    %>
+  <% // ---------------------------------- OPTIONAL --------------------------------------    %>
+  <% // ----------------------------------------------------------------------------------    %>
+
+  <% // ----------------------------------------    %>
+  <% // ---------------- PORTS -----------------    %>
+  <% // ----------------------------------------    %>
+
+  <fieldset>
+    <legend>Ports policy (Optionnal)</legend>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="ssh_port">SSH port</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="ssh_port" id="ssh_port"
+               placeholder="If you want to reconfigure ssh port (recommended, default 22 if you left blank)"
+               value="<%- ssh_port %>">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="tcp_in">TCP IN</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="tcp_in" id="tcp_in"
+               placeholder="22,33,44 (ssh port will not be open by default, you must explicitely open it OR set a port knocking sequence)"
+               value="<%- tcp_in %>">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="tcp_out">TCP OUT</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="tcp_out" id="tcp_out"
+               placeholder="22,33,44 (ssh_port, 80, 465 are opened automatically by default)">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="udp_in">UDP IN</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="udp_in" id="udp_in" placeholder="22,33,44">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="udp_out">UDP OUT</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="udp_out" id="udp_out" placeholder="22,33,44">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="port_knocking">Port knocking</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="port_knocking" id="port_knocking"
+               placeholder="The sequence you want to use for port knocking. eg.4851,5699,3666,5658">
+      </div>
+    </div>
+
+
+  </fieldset>
+
+  <% // ----------------------------------------    %>
+  <% // ---------------- OTHER -----------------    %>
+  <% // ----------------------------------------    %>
+
+  <fieldset>
+    <legend>Other (Optionnal)</legend>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="host_port">Host Port</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="host_port" id="host_port"
+               placeholder="The port where the server can be currently contacted via ssh (default 22 if you left blank)">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="ip_ignore">IP to ignore</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="ip_ignore" id="ip_ignore"
+               placeholder="Group of IP that you want exclude from checks. None if you left blank. eg : 192.168.0.1,192.168.0.42">
+      </div>
+    </div>
+  </fieldset>
+
+  <% // ----------------------------------------    %>
+  <% // --------------- MODULES ----------------    %>
+  <% // ----------------------------------------    %>
+
+  <%
+  for(var module_name in modules){
+
+  if(module_name !== 'security'){
+  %>
+
+  <fieldset>
+    <legend><%- module_name %> (Optionnal)</legend>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="lamp">Install <%- module_name %> module ?</label>
+
+      <div class="col-sm-1">
+        <input class="form-control checkbox module_checkbox" type="checkbox" name="<%- module_name %>"
+               id="<%- module_name %>">
+      </div>
+    </div>
+
+    <%
+    for(var index in modules[module_name]){
+
+      var rule = modules[module_name][index]
+    %>
+
+    <div class="form-group <%- module_name %>_input" style="display: none;">
+      <label class="control-label col-sm-2" for="lamp"><%- rule.name %></label>
+
+      <div class="col-sm-10">
+        <input class="form-control checkbox" type="<%- rule.type %>" name="<%- rule.name %>" id="<%- rule.name %>" placeholder="<%- rule.placeholder %>">
+      </div>
+    </div>
+
+    <%
+    }
+    %>
+
+  </fieldset>
+  <%
+  }
+  }
+  %>
+
+  </fieldset>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-default">Save server and generate files</button>
+  </div>
+</form>
+
+
+<% // ----------------------------------------    %>
+<% // ------------- INPUT SCRIPT -------------    %>
+<% // ----------------------------------------    %>
+
+<script>
+  $(function () {
+    $('.module_checkbox').click(function () {
+      var module_name = $(this).attr('id')
+      $('.' + module_name + '_input').show()
+    })
+  })
+</script>
+
+
+<script>
+
+  $(function () {
+
+    $('#li_install_server').addClass('active')
+
+
+    $('form').submit(function (e) {
+
+      var ssh_port = $('#ssh_port').val().length > 0 ? $('#ssh_port').val() : '22'
+      var port_knocking = $('#port_knocking').val().length > 0
+
+      if (!port_knocking) {
+
+        var tcp_in = $('#tcp_in').val()
+        var ssh_regex = new RegExp(ssh_port)
+
+        console.log(tcp_in)
+        console.log(tcp_out)
+
+        if (!(tcp_in.match(ssh_regex))) {
+          if (!confirm('You did not opened the ssh port AND you did not specified a port knocking sequence, you will NOT be able to connect to your server once installation is done. Do you want to continue ? (bad idea)')) {
+            e.preventDefault()
+          }
+        }
+      } else {
+
+        if ($('#port_knocking').val().split(',').length < 3) {
+          alert('The port knocking sequence must contains at least 3 different ports')
+          e.preventDefault()
+        }
+
+      }
+    })
+  })
+
+</script>

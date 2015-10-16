@@ -18,3 +18,15 @@ exports.replaceInFile = function(path, rule, value){
 
   fs.writeFileSync(path, content)
 }
+
+exports.silent_fail = function(fn, error_fn){
+
+  try{
+    fn()
+  }catch(e){
+
+    if(error_fn) error_fn()
+    // We do nothing as fail has to be silent
+  }
+
+}

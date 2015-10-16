@@ -41,10 +41,27 @@
 <div class="col-sm-offset-2 col-sm-8 mbottom">
   <form id="install_form" class="form-inline" role="form">
 
-    <div class="form-group">
-      <label for="root_password">Root password</label>
-      <input type="text" class="form-control" id="root_password" name="root_password">
+    <%
+    for(var module in modules){
+
+      for(var index in modules[module]){
+
+      var variable_name = modules[module][index].name
+      var variable_type = modules[module][index].type
+    %>
+
+    <div class="row">
+      <div class="form-group col-lg-12">
+        <label class="text-left" for="<%- variable_name %>"><%- variable_name %></label>
+        <input type="<%- variable_type %>" class="form-control" id="<%- variable_name %>" name="<%- variable_name %>">
+      </div>
     </div>
+
+    <%
+    }
+    }
+    %>
+
     <button type="submit" class="btn btn-default">Install the server</button>
 
     <input type="hidden" id="server_id" value="<%- server.id %>">
@@ -121,7 +138,7 @@
     $('#install_form').submit(function (event) {
 
       event.preventDefault()
-      $(this).children('[type="submit"]').attr('disabled', true)
+      //$(this).children('[type="submit"]').attr('disabled', true)
 
       $('.panel-body').html('')
 
@@ -137,21 +154,22 @@
 
     io.socket.on('install', function (msg) {
       $('#install_log .panel-body').prepend('<div class="text-left">' + msg + '</div>')
-      var new_count = parseInt($('#install_count').html())+1
+      var new_count = parseInt($('#install_count').html()) + 1
       $('#install_count').html(new_count)
     })
 
     io.socket.on('error', function (msg) {
       $('#error_log .panel-body').prepend('<div class="text-left">' + msg + '</div>')
-      var new_count = parseInt($('#error_count').html())+1
+      var new_count = parseInt($('#error_count').html()) + 1
       $('#error_count').html(new_count)
     })
 
     io.socket.on('exception', function (msg) {
       $('#error_log .panel-body').prepend('<div class="text-left">' + msg + '</div>')
-      var new_count = parseInt($('#error_count').html())+1
+      var new_count = parseInt($('#error_count').html()) + 1
       $('#error_count').html(new_count)
     })
   })
 
 </script>
+
