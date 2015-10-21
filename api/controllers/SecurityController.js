@@ -92,6 +92,18 @@ module.exports = {
         });
 
 
+        var module_order = require('../../linux_config/config/module_order')
+
+        for(var index in module_order){
+          var module = module_order[index]
+          var template_builder = require('../../linux_config/config/' + module + '/template_builder')
+
+          template_builder(server, output_dir, misc_services.replaceInFile)
+        }
+
+
+        /*
+        OLD CODE TO REPLACE IN TEMPLATES
         // Replace variables in each file in server output directory
         s.ssh(server, output_dir)
         s.csf(server, output_dir)
@@ -103,7 +115,7 @@ module.exports = {
         if (server.lamp && server.lamp === 'on') {
           s.lamp(server, output_dir)
         }
-
+        */
 
         // redirect to the server page
         res.redirect('/server/' + server.id)
@@ -422,7 +434,7 @@ module.exports = {
             })
           }
 
-          async.parallelLimit(array_of_functions, 1, function (err) {
+          async.parallelLimit(array_of_functions, 5, function (err) {
             if (err) reject(err)
 
             out('config files have been transferred to the server')

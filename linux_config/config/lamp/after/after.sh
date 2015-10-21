@@ -2,10 +2,10 @@
 
 #http://www.cyberciti.biz/tips/howto-write-shell-script-to-add-user.html
 #add website user with group 33 and password given in script parameter
-useradd -m -p $(perl -e 'print crypt($ARGV[0], "password")' $1) website -g 33
+useradd -m -p $(perl -e 'print crypt($ARGV[0], "password")' $2) "$1" -g 33
 
 #change website umask:
-echo "umask 007 >> /home/website/.bashrc"
+echo "umask 007 >> /home/$1/.bashrc"
 
 #change www-data umask
 echo "umask 007" >> /etc/apache2/envvars

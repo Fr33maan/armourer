@@ -1,3 +1,3 @@
 module.exports = {
-  arguments : ['webworker_password']
+  arguments : ['webworker_user', 'webworker_password']
 }
