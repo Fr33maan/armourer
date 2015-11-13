@@ -46,16 +46,19 @@
 
       for(var index in modules[module]){
 
-      var variable_name = modules[module][index].name
-      var variable_type = modules[module][index].type
-    %>
+        // If the module isn't in the server we don't add the fields
+        if(!server[module]) continue
 
-    <div class="row">
-      <div class="form-group col-lg-12">
-        <label class="text-left" for="<%- variable_name %>"><%- variable_name %></label>
-        <input type="<%- variable_type %>" class="form-control" id="<%- variable_name %>" name="<%- variable_name %>">
+        var variable_name = modules[module][index].name
+        var variable_type = modules[module][index].type
+      %>
+
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <label class="text-left" for="<%- variable_name %>"><%- variable_name %></label>
+          <input type="<%- variable_type %>" class="form-control" id="<%- variable_name %>" name="<%- variable_name %>">
+        </div>
       </div>
-    </div>
 
     <%
     }

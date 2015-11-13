@@ -279,6 +279,7 @@ Psad signature update is also performed once a day. You can find update script i
 - edit a server and reinstall it
 - explain that is going in "error log" is not really error but what is flagged as error in stdout in ssh npm
 - error : Once the server is installed, the node server will crash after a while
+  the "reboot" is maybe causing this problem as the stream is never closed and the "reboot" thenable is not fulfilled
 
   - http://stackoverflow.com/questions/31501038/node-js-error-read-econnreset
   - http://stackoverflow.com/questions/17245881/node-js-econnreset

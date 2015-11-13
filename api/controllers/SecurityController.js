@@ -192,8 +192,11 @@ module.exports = {
 
           return function (callback) {
 
+            // The try is for access sync
             try {
               fs.accessSync(source)
+
+              console.log('copying "'+source+'" to "'+ destination+'"')
 
               scp2.scp(source, {
                 host: config.host,
@@ -261,6 +264,7 @@ module.exports = {
         var type = module_order[index]
 
         // If the install type should not be installed on the server
+
         if (server[type] !== 'on') continue
 
         // Create folders in /tmp/ for each type of config with SSH
@@ -420,6 +424,10 @@ module.exports = {
 
             var type = module_order[index]
 
+            // If the module is not activated we don't send files
+            if(server[type] !== 'on') continue
+
+            // Silent is a function for silent failing instead of throwing an error because we don't want to go to the catch block
             silent(function () {
               // Relative path from api/controllers/SecurityController.js
               var files_to_transfer = require('../../linux_config/config/' + type + '/files_to_transfer')
@@ -453,10 +461,14 @@ module.exports = {
 
           var array_of_functions = build_script('after')
 
-          async.parallelLimit(array_of_functions, 1, function (err) {
-            if (err) reject(err)
-            resolve()
-          })
+          try{
+            async.parallelLimit(array_of_functions, 1, function (err) {
+              if (err) reject(err)
+              resolve()
+            })
+          }catch(e){
+            reject(e)
+          }
         })
 
 
