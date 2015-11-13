@@ -196,7 +196,7 @@ module.exports = {
             try {
               fs.accessSync(source)
 
-              console.log('copying "'+source+'" to "'+ destination+'"')
+              if (sails.config.debug) console.log('copying "'+source+'" to "'+ destination+'"')
 
               scp2.scp(source, {
                 host: config.host,
