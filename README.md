@@ -37,9 +37,6 @@ Armourer aims to become a standard in security stack, and it needs you.
 
 #### Armourer is a Node app built with Sails.js framework
 
-
----
-
   - ### a. Dependencies
     - node.js
     - mongodb
