@@ -1,7 +1,7 @@
 {
   "name": "armourer",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Default security configuration & installation for a Debian machine + automatic install for whatever you want",
   "keywords": ["debian install", "automatic install", "security", "basic configuration"],
   "dependencies": {
