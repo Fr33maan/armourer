@@ -4,20 +4,23 @@
 # Armourer
 
 Armourer exists because I need an uniform security configuration for any server I could administrate.
+
 It is designed to prepare a Debian server for a production secured environment.
+
 Armourer will automatically install some security softwares and configure them with very simple user input.
+
 Armourer aims to become a standard in security stack, and it needs you.
 
 ---
 
 ## Summary
-  - ####[1. How it works ?](#how_it_works)
-  - ####[2. Installation](#installation)
-  - ####[3. Use it !](#use_it)
-  - ####[4. Configuration](#configuration)
-  - ####[5. Custom software stacks](#custom_software_stacks)
-  - ####[6. Notes](#notes)
-  - ####[7. Sources](#sources)
+  - [1. How it works ?](#how_it_works)
+  - [2. Installation](#installation)
+  - [3. Use it !](#use_it)
+  - [4. Configuration](#configuration)
+  - [5. Custom software stacks](#custom_software_stacks)
+  - [6. Notes](#notes)
+  - [7. Sources](#sources)
 
 ---
 
@@ -33,6 +36,7 @@ Armourer aims to become a standard in security stack, and it needs you.
 ## <a name="installation"></a> 2. Installation
 
 #### Armourer is a Node app built with Sails.js framework
+
 
 ---
 
@@ -121,7 +125,7 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
       - the name of your company which is used for the machine group
 
     ---
-    ** Ports policy and Other are optional -> see the configuration section **
+    **Ports policy and Other are optional -> see the configuration section**
 
     Click on "Save server and generate files"
 
@@ -137,7 +141,7 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
 
     Your server is now configured, you can use it !
 
-    ** You should change the root password and the sudo password of your server **, I promise that there is no secret function that send
+    **You should change the root password and the sudo password of your server**, I promise that there is no secret function that send
     me an email with your password but it is more secure to change them.
 
 ---
@@ -148,7 +152,7 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
 
   - ### a. Additional server configuration
 
-    ** Ports policy : **
+    **Ports policy :**
       - The future ssh port
       - ports TCP IN to open
       - ports TCP OUT to open (default to : ssh port, 80 for debian updates, 465 for SSMTP)
@@ -156,17 +160,17 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
       - ports UDP OUT to open (default to 123 for NTP)
       - port knocking sequence -> a port sequence you will "ping" to open the ssh port
 
-        ** Important : **
+        **Important :**
         If you change the default ssh port(22), be sure to open the ssh port in TCP_IN & TCP_OUT OR to to create a port knocking sequence.
         Otherwise you will never be able to connect to your server once installation is over.
 
     ---
-    ** Other : **
+    **Other :**
       - The current ssh port of your server
       - IP or group of IPs you want to exclude from firewall check (eg. your IP) - separated by commas
 
     ---
-    ** Software stacks : **
+    **Software stacks :**
 
     Armourer give you the ability to add security or any kind of software by create your custom stack very easily.
     Currently only LAMP exists and it is more a proof of concept than a seriously configured stack.
@@ -174,7 +178,7 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
 
     LAMP :
       - webworker_user : the name of the user who will host websites in his home directory.
-      - ** If you use the LAMP stack and you want to use the webwroker_user to connect via SFTP, you will need to add the webworker_user in the allowed user in /etc/sshd_config **
+      - **If you use the LAMP stack and you want to use the webwroker_user to connect via SFTP, you will need to add the webworker_user in the allowed user in /etc/sshd_config**
 
   ---
 
@@ -182,7 +186,7 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
 
       - #### I. Software used
 
-        ** Security stack : **
+        **Security stack :**
           - wget -> http://www.gnu.org/software/wget/
           - unattended-upgrades -> https://wiki.debian.org/UnattendedUpgrades
           - nullmailer -> http://untroubled.org/nullmailer/
@@ -194,7 +198,7 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
           - psad -> http://cipherdyne.org/psad/
 
         ---
-        ** LAMP stack **
+        **LAMP stack**
           - apache -> https://httpd.apache.org/
           - mysql -> https://www.mysql.com/
           - php -> https://secure.php.net/
@@ -205,32 +209,32 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
 
       - #### II. Software configuration
 
-        ** Debian : **
+        **Debian :**
           - IPV6 is disabled
           - Root login on ssh is disabled
           - We allow only the sudo account you specified in config to login on ssh
           - Exim4 is removed because in most cases we do not need a mail server -> replaced by nullmailer
 
         ---
-        ** RKHunter **
+        **RKHunter**
         - /etc/rkhunter/rkhunter.conf
           - MAIL-ON-WARNING="root"
 
         ---
-        ** SSH **
+        **SSH**
         - /etc/ssh/sshd_config
           - PermitRootLogin no
           - port
           - AllowUsers sudo_username
 
         ---
-        ** Fail2Ban **
+        **Fail2Ban**
         - /etc/fail2ban/jail.local
           - [DEFAULT] - ignoreip (if defined)
           - [ssh] - port
 
         ---
-        ** CSF **
+        **CSF**
         - /etc/csf/csf.conf
           - TESTING = "0"
           - CONNLIMIT (1 connection allowed on ssh_port)
@@ -249,13 +253,13 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
           - add exe:/usr/sbin/atd - i'm not sure if it is secure to remove ressource check for this executable
 
         ---
-        ** Nullmailer **
+        **Nullmailer**
         - /etc/nullamiler/remotes
         - /etc/nullmailer/adminaddr
           - Used to redirect local mails to an external email address
 
         ---
-        ** Psad **
+        **Psad**
         - /etc/psad/psad.conf
           - IGNORE_PORTS = port knocking sequence
           - HOSTNAME = machine_name.company_name
@@ -266,12 +270,12 @@ Sails.js runs its server on port 1337, so you will find the app at http://localh
           - AUTO_BLOCK_TIMEOUT          36000 -> blocking time 10 hours
 
         ---
-        ** Other **
+        **Other**
         - /etc/mailname
           - Domain name from each mail are sent - machine_name.company_name
 
         ---
-        ** Cron **
+        **Cron**
         - /etc/crontab
           - change when cron.daily is executed from 6:25 to 2:00
 
